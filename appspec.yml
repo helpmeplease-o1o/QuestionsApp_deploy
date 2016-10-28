@@ -1,0 +1,21 @@
+version: 0.0
+os: linux
+files:
+  - source: /application
+    destination: /var/www/
+hooks:
+  BeforeInstall:
+    - location: scripts/install_dependencies
+      timeout: 3600
+      runas: root
+  AfterInstall:
+    - location: scripts/npm_build
+      timeout: 3600
+  ApplicationStart:
+    - location: scripts/start_server
+      timeout: 180
+      runas: root
+  ApplicationStop:
+    - location: scripts/stop_server
+      timeout: 300
+      runas: root

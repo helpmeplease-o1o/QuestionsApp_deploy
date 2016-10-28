@@ -1,0 +1,10 @@
+#!/bin/bash
+cd /var/www
+rm -rf node_modules && npm cache clean && npm i
+npm rebuild node-sass
+npm i
+npm install
+npm install -g bower grunt-cli http-server
+npm install grunt-contrib-imagemin --save-dev
+bower install --allow-root
+grunt build

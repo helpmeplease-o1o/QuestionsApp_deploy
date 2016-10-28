@@ -1,0 +1,39 @@
+#!/bin/sh
+
+#
+# chkconfig: 35 99 99
+# description: Node.js /home/nodejs/sample/app.js
+#
+
+. /etc/rc.d/init.d/functions
+
+USER="root"
+
+DAEMON="/usr/bin/node"
+ROOT_DIR="/var/www/api"
+SERVER="$ROOT_DIR/index.js"
+LOG_FILE="$ROOT_DIR/index.js.log"
+
+LOCK_FILE="/var/lock/subsys/node-server"
+
+do_start()
+{
+  if [ ! -f "$LOCK_FILE" ] ; then
+    echo -n $"Starting $SERVER: "
+    runuser -l "$USER" -c "$DAEMON $SERVER >> $LOG_FILE &" && echo_success || echo_failure
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && touch $LOCK_FILE
+  else
+    echo "$SERVER is locked."
+    RETVAL=1
+  fi
+}
+
+case "$1" in
+  *)
+    do_start
+    ;;
+esac
+
+exit $RETVAL
